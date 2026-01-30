@@ -1,0 +1,11 @@
+
+
+// cluster -> storage + processor
+// Database -> use for store data 
+
+// note 
+
+// {
+//     title - string
+//     description - string 
+// }
