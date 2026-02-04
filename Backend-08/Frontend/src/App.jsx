@@ -8,7 +8,7 @@ const App = () => {
   const [notes, setNotes] = useState([])
 
   function fetchNotes() {
-    axios.get("https://notesbackend-phi.vercel.app/api/notes")
+    axios.get("https://notesbackend-c0jb0zpz9-aakahs-gogales-projects.vercel.app/api/notes")
     .then(res => {
       const data = res.data;
       setNotes(Array.isArray(data) ? data : data.notes);
@@ -27,7 +27,7 @@ const App = () => {
 
     console.log(title.value,description.value);
 
-    axios.post("https://notesbackend-phi.vercel.app/api/notes",{
+    axios.post("https://notesbackend-c0jb0zpz9-aakahs-gogales-projects.vercel.app/api/notes",{
       title:title.value,
       description:description.value
     })
@@ -40,7 +40,7 @@ const App = () => {
   }
 
   function handleDelete(noteId){
-    axios.delete("https://notesbackend-phi.vercel.app/api/notes/"+noteId)
+    axios.delete("https://notesbackend-c0jb0zpz9-aakahs-gogales-projects.vercel.app/api/notes/"+noteId)
     .then(res=>{
       console.log(res.data)
       fetchNotes()
