@@ -2,6 +2,8 @@
 
 const express = require("express")
 const noteModel = require("./models/note.model")
+const cors = require("cors")
+const path = require("path")
 
 const app = express()
 
@@ -9,7 +11,7 @@ const app = express()
 
 
 app.use(express.json())// Middleware , ye nahi likhoge to body me apki information nahi aayegi
-
+app.use(cors())
 
 //note create krne ke liye ya kuch bhi create krne ke liye POST use krte he 
 
@@ -30,15 +32,16 @@ app.post("/api/notes", async (req, res)=>{
 
 // get /api/note
 //fatch all the notes data from mongo
-app.get("/api/notes",async (req, res)=>{
-    
-    const notes = await noteModel.find()
+app.get("/api/notes", async (req, res) => {
+  try {
+    const notes = await noteModel.find();
+    res.status(200).json(notes); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch notes" });
+  }
+});
 
-    res.status(200).json({
-        message: "Notes fetched successfully",
-        note
-    })
-})
 
 app.delete("/api/notes/:id", async (req, res)=>{
     const id = req.params.id
@@ -63,7 +66,9 @@ app.patch("/api/notes/:id",async (req, res)=>{
     })
 })
 
-
+app.use('*name', (req, res)=>{
+    res.sendFile(path.join(__dirname,"..","/public/index.html"))
+})// ye us api ko handle krega jo humare web me exiest hi nahi krti 
 
 
 module.exports = app
