@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
     name : String,
-    email : {
+    email : { 
         type: String,
         unique:[true, "With this email user account already exists"]
     },
