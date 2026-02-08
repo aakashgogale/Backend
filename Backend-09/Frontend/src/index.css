@@ -1,0 +1,49 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html, body{
+  height: 100%;
+  width: 100%;
+}
+
+body{
+  background-color: beige;
+  color: black;
+}
+
+.main-contact{
+  display: flex;
+  gap: 1rem;
+  padding: 2rem;
+  padding-inline: 1rem;
+}
+
+.card-contact{
+  background-color: rgb(32, 29, 29);
+  padding: 1rem;
+  border-radius: 0.7rem;
+  max-width: 20rem;
+  color: white;
+}
+
+.form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0px;
+  gap: 10px;
+}
+
+.form-card{
+  display: flex;
+  gap: 10px;
+}
+
+.input{
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: none;
+}
