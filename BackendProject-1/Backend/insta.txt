@@ -1,0 +1,19 @@
+
+=> Authentication
+    -> register
+        -> user ka data save krna
+        -> token user ko dena
+        
+    -> Login
+    -> logout (token blacklisting) importtant
+    -> OTP based registraion
+
+=> Post
+    -> Create
+    -> can see the feed
+    -> save post
+    -> like posts (collection types) 
+
+=> Users
+    -> follow
+    -> following 
