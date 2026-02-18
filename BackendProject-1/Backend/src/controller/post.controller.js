@@ -4,6 +4,7 @@ const {toFile} = require("@imagekit/nodejs");
 const  verify  = require("crypto");
 const jwt = require("jsonwebtoken");
 const  Captions  = require("lucide-react");
+const likeModel = require("../models/like.model")
 
 
 const imageKit = new ImageKit({
@@ -12,28 +13,7 @@ const imageKit = new ImageKit({
 
 
 async function postCreatController(req, res){
-    console.log(req.body, req.file);
-
-    const token = req.cookies.token // token use krte he user ko pehchane ke liye , ki ye user kon he 
-
-    if(!token){
-      return res.status(401).json({ 
-        message:"Token not provided, Unathorized access"
-      })
-    }
-
-  let decoded; 
-
-  try{
-     decoded = jwt.verify(token, process.env.JWT_SCERET) //VERIFY 
-    } catch(err){
-      return res.status(401).json({
-        message: "user not Authorized"
-      })
-    }
-  console.log(decoded)
     
-
 const file = await imageKit.files.upload({
   file: await toFile(Buffer.from(req.file.buffer), 'file'),
   fileName: 'Test',
@@ -43,7 +23,7 @@ const file = await imageKit.files.upload({
 const post = await postModel.create({
             Captions: req.body.Captions,
             imgUrl: file.url,
-            user: decoded.id
+            user: req.user.id
         })
 
   res.status(201).json({
@@ -54,28 +34,28 @@ const post = await postModel.create({
 
 async function getPostController(req, res){
 
-   const token = req.cookies.token
+  //  const token = req.cookies.token
 
-   if(!token){
-    return res.status(401).json({
-      message : "Token Invalid"
-    })
-   }
+  //  if(!token){
+  //   return res.status(401).json({
+  //     message : "Token Invalid"
+  //   })
+  //  }
 
-   let decoded = null
-   try{
+  //  let decoded = null
+  //  try{
 
-     decoded = jwt.verify(token, process.env.JWT_SCERET)
+  //    decoded = jwt.verify(token, process.env.JWT_SCERET)
 
-   } catch(err) {
+  //  } catch(err) {
 
-    return res.status(401).json({
-      message: "Token Invaild"
+  //   return res.status(401).json({
+  //     message: "Token Invaild"
 
-    })
+  //   })
 
-   }
-   const userId = decoded.id
+  //  }
+   const userId = req.user.id
    const posts = await postModel.find({
     user : userId
 
@@ -89,25 +69,25 @@ async function getPostController(req, res){
 
 async function getPostDetailsController(req, res){
 
-  const token = req.cookies.token
+  // const token = req.cookies.token
 
-  if(!token){
-    return res.status(401).json({
-      message: "Unathorized Access"
-    })
-  }
+  // if(!token){
+  //   return res.status(401).json({
+  //     message: "Unathorized Access"
+  //   })
+  // }
 
-  let decoded;
+  // let decoded;
 
-  try{
-    decoded = jwt.verify(token, process.env.JWT_SCERET)
-  }catch(err){
-    return res.status(404).json({
-      message: "Token Invaild"
-    })
-  }
+  // try{
+  //   decoded = jwt.verify(token, process.env.JWT_SCERET)
+  // }catch(err){
+  //   return res.status(404).json({
+  //     message: "Token Invaild"
+  //   })
+  // }
 
-  const userId = decoded.id
+  const userId = req.user.id
   const postId = req.params.postId
 
   const post = await postModel.findById(postId)
@@ -133,8 +113,33 @@ async function getPostDetailsController(req, res){
 
 }
 
+async function likePostController(req, res) {
+    
+  const username = req.user.username
+  const postId = req.params.postId
+
+  const post = await postModel.findById(postId)
+
+  if(!post){
+    return res.status(404).json({
+      message : "Post not found."
+    })
+  }
+
+  const like = await likeModel.create({
+    post : postId,
+    user : username
+  })
+
+  res.status(200).json({
+    message : "Post liked successfully",
+    like
+  })
+}
+
 module.exports = {
     postCreatController,
     getPostController,
-    getPostDetailsController
+    getPostDetailsController,
+    likePostController
 }

@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 const postSchema = mongoose.Schema({
     captions : {
         type : String,
-        default : " ",
+        default : "",
     },
     imgUrl : {
         type: String,
