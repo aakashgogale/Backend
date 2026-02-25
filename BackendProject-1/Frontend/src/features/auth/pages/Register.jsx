@@ -1,44 +1,44 @@
 import React, { useState } from 'react'
-import '../style/form.scss'
-import { Link } from 'react-router'
-import axios from 'axios'
+import { Link, useNavigate } from 'react-router'
+import { useAuth } from '../hooks/useAuth'
 
 const Register = () => {
 
+    const {loading, handleRegister} = useAuth()
+
     const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
+    const [email, SetEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    async function handleSumbit(e) {
+    const navigate = useNavigate()
+
+   const handleSumbit = async ()=>{
         e.preventDefault()
 
-        axios.post("http://localhost:3000/api/auth/register",{
-            username,
-            email,
-            password
-        },{
-            withCredentials: true
-        })
-        .then(res => {
-            console.log(res.data);
-            
-        })
+       await handleRegister(username, email, password)
+       navigate('/')
+
+
+    }
+
+    if(loading){
+        return(<main><h1>Loading...</h1></main>)
     }
 
   return (
     <main>
-        <div className="form-contrainer">
+        <div className="form-container">
             <h1>Register</h1>
             <form onSubmit={handleSumbit}>
-                <input
-                 onInput={(e)=>{setUsername(e.target.value)}} type="text" name='username' placeholder='Enter username'/>
-                <input
-                 onInput={(e)=>{setEmail(e.target.value)}} type="text" name='email' placeholder='Enter email'/>
-                <input
-                 onInput={(e)=>{setPassword(e.target.value)}} type="password" name='password' placeholder='Enter password'/>
-                <button>Sing up</button>
+                <input onChange={(e)=>{setUsername(e.target.value)}} type="text" name='username'
+                 placeholder='Enter username' />
+                 <input onChange={(e)=>{SetEmail(e.target.value)}} type="email" name='email'
+                 placeholder='Enter email address' />
+                <input onChange={(e)=>{setPassword(e.target.value)}} type="password" name='password'
+                 placeholder='Enter password' />
+                <button className='button primary-button'>Register</button>
             </form>
-            <p className='para'>Already have an account? <Link className='toggleAuthFrom' to='/login'>login</Link> </p>
+            <p>Already have an account?<Link to={'/Login'}>Login to account</Link></p>
         </div>
     </main>
   )
